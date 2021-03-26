@@ -1,5 +1,8 @@
+sudo nano /etc/netplan/01-network-manager-all.yaml
+sudo nano /etc/netplan/00-installer-config.yaml ---> Ubuntu server
+
 # Extracting files
-tar -xvzf community_images.tar.gzF
+tar -xvzf community_images.tar.gz
 
     f: this must be the last flag of the command, and the tar file must be immediately after.
        It tells tar the name and path of the compressed file.
@@ -17,7 +20,7 @@ dpkg --install package-name-here.deb
 dpkg -i -R /path/to/dir/name/with/lots/of/dot-deb-files/
 dpkg -i --recursive /path/to/dir/name/with/lots/of/dot-deb-files/
 
-
+sudo nano /etc/netplan/01-network-manager-all.yaml
 ------------------------------------------------------------------------------------------
 Installing any program via source code:
 
@@ -78,7 +81,9 @@ How to Change Group Ownership of a File: (second)
 sudo chgrp group <filename>sudo unattended-upgrade -d -v
 
 
+cp -R Pictures Pictures_backup  ---> Copies folder Pictures to Pictures_backup
 
+sudo mv /root/folder1 /home/folder2/ ---->moves folder1 into fo
 
 -------------------------------------------------------------
  
@@ -649,8 +654,10 @@ W = 6.33M
 Typical test:
 
  iperf3 -c <IP ADD> -i 1 -t 60 -b 30M -w 1.9M -P 8 -------> Upstream
- iperf3 -c <IP ADD> -i 1 -t 60 -b 30M -w 1.9M -P 8 -R ----> Downstream
+ iperf3 -c 10.111.40.252 -i 1 -t 60 -b 30M -w 1.9M -P 8 -R ----> Downstream
 
+
+10.111.40.252
 -----------------------------------------------------------------------------------------
 
 
@@ -668,7 +675,7 @@ To run multiple iperf3 processes for a testing a high-speed host, do the followi
 
 Start multiple servers:
 
-   iperf3 -s -p 5101&; iperf3 -s -p 5102&; iperf3 -s -p 5103 &
+   iperf3 -s -p 5101&; iperf3 -s -p 5102&; iperf3 -s -p 5103&
 
 and then run multiple clients, using the "-T" flag to label the output:
 
@@ -738,25 +745,7 @@ tftp put <file name>
 
 -----------------------------------------------------------------------------------------------
  
-SCP File transfer
-
-scp -v <file> oscar@172.25.10.53:/home/oscar/Python/debian
-
-scp -r /home/oscar/Python/Examples/archive oscar@172.25.10.53:/home/oscar/Python/fedora
-
-ON UBUNTU 17.10:
-
-apt-get install openssh-server 
-
-ensure firewall allows ssh /pt 22
-
-
-----------------------------------------------------------------------------------------------------------
-
-tasksel ----> starts the software installation 
-
-
-----------------------------------------------------------------------------------------
+ 
  
 Running VS Code ar root
 
@@ -823,6 +812,8 @@ rm -f /opt/ovf/.configured
 
 
 ESXi Teleports license: 1N617-AU29J-J8U81-093K6-0RW0N
+
+                        JJ415-FU3D3-J8K80-03C8M-ATW5J
 
 -----------------------------------------------------------
  
@@ -1177,13 +1168,14 @@ ovftool.exe -ds=datastore1 --net:"VM Network"="Man_Windows" -dm=thin -n=MIR_LAB-
 
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=MIR_LAB-01_BW_Test_FTP_V1.2 "C:\BW_Test_Teleport_1.2\BW_Test_Teleport_1.2.ovf" vi://10.152.18.52
 
-ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_Sniffer_1.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf" vi://172.20.146.120  ----> Latest
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_Sniffer_1.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf" vi://172.20.152.120  ----> Latest
 
-ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_Sniffer_1.0 "C:\ENK_Sniffer_1.0\ENK_Sniffer_1.0\ENK_Sniffer_1.0.ovf" vi://172.20.142.120
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_LAB_1.1 "C:\ENK_Sniffer_1.1\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf" vi://10.214.8.120
 
-ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=RAI-03_BW_Test_FTP "C:\BW_Test_Teleport_1.5\BW_Test_Teleport_1.5.ovf" vi://172.20.144.120
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=RAI-04_BW_Test_FTP "C:\BW_Test_Teleport_1.5\BW_Test_Teleport_1.5.ovf" vi://172.20.154.120
 
-ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=ENK_Sniffer_1.0 "C:\ENK_Sniffer_1.1\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf" vi://172.20.154.120
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=BW_Test_Teleport_2.0 "C:\BW_Test_Teleport_2.0\BW_Test_Teleport_2\BW_Test_Teleport_2.ovf" vi://172.20.152.120
+
 
 ovftool.exe vi://10.200.8.28/BW_Test_IO_ND "C:\BW_Test_IO_ND_6_7.ovf" 
 ovftool.exe vi://10.200.8.28/BW_Test_TG "C:\BW_Test_TG_6_7.ovf"
@@ -1191,13 +1183,18 @@ ovftool.exe vi://10.200.8.28/BW_Test_TG "C:\BW_Test_TG_6_7.ovf"
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=BW_Test_IO_ND "C:\BW_Test_IO_ND_6_7.ovf" vi://10.152.18.52
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=BW_Test_IO_ND C:\BW_Test_TG_6_7\BW_Test_TG_6_7\BW_Test_TG_6_7.ovf vi://10.152.18.52
 
-ovftool.exe vi://10.200.8.28/ENK_Sniffer_1.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf"
+ovftool.exe vi://10.200.8.28/ENK_Sniffer_2.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf"
 
 
 ovftool.exe vi://10.200.8.28/ENK_Sniffer_1.0 "C:\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf"
 
 ovftool.exe vi://10.200.8.28/BW_Test_Teleport_1.5 "C:\BW_Test_Teleport_1.5\BW_Test_Teleport_1.5.ovf"
 
+ovftool.exe vi://10.152.18.52/BW_Test_IO_ND "C:\BW_Test_IO_ND.ovf"
+
+ovftool.exe vi://10.200.8.28/ENK_Sniffer_2.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf"
+
+ovftool.exe vi://10.200.8.28/BW_Test_Teleport_2.0 "C:\BW_Test_Teleport_2.0\BW_Test_Teleport_2.0"
 
 
 How to copy VMS between ESXi Hosts:
@@ -1208,7 +1205,7 @@ ovftool.exe -ds=<dest-datastorename> vi://<source-esxi-host-name/vm-name> vi://<
 
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_Sniffer_1.0 vi://10.200.8.28/ENK_Sniffer_1.0 vi://172.20.130.120	
 
-
+ovftool.exe -ds=datastore1 -dm=thin -n=BW_Test_IO_ND "C:\BW_Test_IO_ND "C:\BW_Test_IO_ND.ovf"" vi://10.200.8.18
 --------------------------------------------------
 HOW TO Clone A VM HD
 
@@ -1337,6 +1334,10 @@ sudo nano /etc/rc.local
 /usr/bin/iperf3 -s -D
 /usr/bin/indicator-ip -i ens160
 exit 0 
+
+promisc.service
+/usr/bin/devnet.sh
+/usr/bin/promisc.sh
 ---------------------------------------------------------------------------------------------
 APP To display ip address:
 
@@ -1673,7 +1674,8 @@ On the router:
 
 - Create hostname
 - Create Domain name: ip domain-name mtnsat.net 
-- username administrator privilege 15 secret huemac86 -----> UN must match the one in the server
+                      ip domain name mtnsat.net ---> IOS-xe
+- username administrator privilege 15 secret mtn33025 -----> UN must match the one in the server
 - Generate key:
     crypto key generate rsa usage-keys label administrator modulus 2048
     ip ssh rsa keypair-name administrator
@@ -1864,17 +1866,9 @@ Nexus_9Xb = {
 net_connect = ConnectHandler(**cisco_7260a)
 net_connect = ConnectHandler(**Nexus_9Xb)
 
-
-
-
-
-
-
-
-
 cisco = { 
           'device_type': 'cisco_ios', 
-          'host': '10.1.1.1', 
+          'host': '192.168.1.4', 
           'username': 'administrator', 
           'password': 'huemac86',
           'use_keys': False,
@@ -2106,7 +2100,7 @@ rm -rf .git
     $ git config --global user.email oscar.lopez@globaleagle.com
 
 - Commit the files that you've staged in your local repository
-    $ sudo git commit -m "first commit" 
+    $ sudo git commit -m "second commit" 
 
 - In the Command prompt, add the URL for the remote repository where your local repository will be pushed
     $ sudo git remote add <ND_IO_Files> https://github.com/olg33/<ND_IO_Files>.git
@@ -2144,14 +2138,41 @@ sudo /sbin/tc qdisc add dev ens192 handle ffff: ingress
 sudo /sbin/tc qdisc add dev ens224-ifb root htb
 sudo /sbin/tc qdisc add dev ens224 handle ffff: ingress
 
+Modify file /usr/sbin/fireqos to add dscp values:
+for tdscp in ${dscp}
+        do
+                dscp_value=
+                tos_value=
+                tos_mask=
+                case "${tdscp^^}" in
+                        any)    ;;
+
+                        CS1)
+                                tos_value="0x20"
+                                tos_mask="0xfc"
+                                ;;
+                        CS2)
+                                tos_value="0x40"
+                                tos_mask="0xfc"
+                                ;;
+                        CS3)
+                                tos_value="0x60"
+                                tos_mask="0xfc"
+                                ;;
+                        CS4)
+                                tos_value="0x80"
+                                tos_mask="0xfc"
+                                ;;
+
 ------------------------------------------------------------------
 starting QoS 
 
 # FireQOS configuration file /etc/firehol/fireqos.conf
-# sudo fireqos start (Wait 5 to 10 minutes then load graph)
+sudo fireqos start (Wait 5 to 10 minutes then load graph)
+/usr/sbin/service netdata restart
 # /usr/share/netdata/web/bwtest.html 
 
-flent rrul_var --test-parameter bidir_streams=7 --test-parameter markings=11,13,15,17,19,10,1
+flent rrul_var -H 10.111.39.122 --test-parameter bidir_streams=7 --test-parameter markings=11,13,15,17,19,20,1
 
  
 
@@ -2404,8 +2425,12 @@ KIBANA:
   server.port: 5601
   elasticsearch.url: "http://localhost:9200"
   
+  sudo systemctl restart kibana
   systemctl enable kibana
   systemctl start kibana
+
+  sudo systemctl restart kibana
+  sudo systemctl status ntopng
 
 - To stop Kibana
 
@@ -2447,20 +2472,10 @@ In elasticsearch.yml
 xpack.monitoring.enabled: true
 xpack.monitoring.collection.enabled: true
 
-----------------------------------
-Metricbeat
-
-Install:
-
-curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.7.0-amd64.deb
-sudo dpkg -i metricbeat-7.7.0-amd64.deb
-
-Config:
-sudo nano /etc/metricbeat/metricbeat.yml
 
 
 -------------------------------------------------------------------------------------
-Speedtest Installation
+Speedtest Installation bwtest
 
 - sudo apt-get install -y git-core
 - sudo apt install apache2 php
@@ -2480,6 +2495,7 @@ To check resources utilization:
 
 loader > boot bootflash:nxos.9.2.1.bin
 
+-------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 
 Ntopng Installation
@@ -2490,13 +2506,13 @@ apt install pfring-dkms nprobe ntopng n2disk cento
 
 http://packages.ntop.org/apt/
 
-- Unremark /etc/ntopng/ntopng.conf 
+- Unremark sudo nano /etc/ntopng/ntopng.conf 
   
 -i=ens160
 -w=3000
 add
 -l=1 for login passby
-
+--community
 - for ES integration:
   sudo ntopng /etc/ntopng/ntopng.conf -F "es;ntopng;ntopng-%Y.%m.%d;http://localhost:9200/_bulk;"
   ntopng -F “es;flows;ntopng-%Y.%m.%d;http://10.200.8.12:9200/_bulk;”
@@ -2651,18 +2667,13 @@ oeIP2019!
 
 a. Create a domain name:
 hostname -f
-sudo nano /etc/hostname
- 
-atl.01.enk
-
-nap.01.devnet
-mir.01.devnet
-sudo nano /etc/hosts
+- sudo nano /etc/hostname
+- sudo nano /etc/hosts
  127.0.0.1    localhost
  127.0.1.1    hol.01.bwt
 
 Restart or:
-sudo sysctl kernel.hostname=rai.01.enk
+sudo sysctl kernel.hostname=rai.05.enk
 
 --------------------------------------------------------------------------------
 a1. If installing a BWT VM at HOL, add a static route for the smtp relay host:
@@ -2679,7 +2690,7 @@ sudo apt-get install -y mailutils
 
 to re-configure: dpkg-reconfigure postfix
 
-c. Configure postfix (IF USING GMAIL SMTP RELAY HOST)
+c. ***********Configure postfix (IF USING GMAIL SMTP RELAY HOST)***********************
  ######################################################################################
  Note: If postfix config window needs to be re-launched, type: dpkg-reconfigure postfix
  - Internet Site
@@ -2726,7 +2737,7 @@ e. Restart
  sudo systemctl restart postfix
 ##################################################################################################################################
 
-c. Configure postfix (IF USING HOLMDEL SMTP RELAY HOST)
+c. **************************Configure postfix (IF USING HOLMDEL SMTP RELAY HOST)****************************
 *********************************************************************************************************************************
 sudo nano /etc/postfix/main.cf
 ===========================================================================
@@ -2773,13 +2784,13 @@ sendmail -bp
 *********************************************************************************************************************************
 d. Rename administrator account
  
-sudo chfn -f "rai.01.enk" administrator
+sudo chfn -f "rai.04.bwt" administrator
 
 e. create canonical address mapping
 
 sudo nano /etc/postfix/canonical
 
-    administrator@stn.01.enk  stn.01.enk@globaleagle.com
+administrator@rai.05.enk  rai.05.enk@globaleagle.com
 
 f. execute postmap against canonical file
 
@@ -2827,8 +2838,8 @@ sudo nano /etc/apt/apt.conf.d/10periodic
 
 APT::Periodic::Update-Package-Lists "0";
 APT::Periodic::Download-Upgradeable-Packages "0";
-APT::Periodic::AutocleanInterval "30";
-APT::Periodic::Unattended-Upgrade "30";
+APT::Periodic::AutocleanInterval "40";
+
 
 d) Modify
 sudo nano /etc/apt/apt.conf.d/50unattended-upgrades
@@ -2862,7 +2873,7 @@ Unattended-Upgrade::Automatic-Reboot "false";
  
 
 sudo nano /etc/apt/apt.conf.d/20auto-upgrades
-APT::Periodic::Update-Package-Lists "0";   ---> Apt update every 2 days
+APT::Periodic::Update-Package-Lists "10";   ---> Apt update every 2 days
 APT::Periodic::Unattended-Upgrade "40"; -----> unattended on
 
 
@@ -2887,9 +2898,11 @@ Forwarding ROOT messages to oscar.lopez@globaleagle.com:
 ------------------------------------------------------------------------------------------------
 Script to check and notify Hard Drive usage
 
+Command: df -h grep /dev/sda5
+
 sudo nano /etc/cron.daily/df-check
 
-'/dev/sda5' for ENK
+'/dev/sda5' for ENK 'dev/sda1' for BWT
 
 #!/bin/bash
 
@@ -2905,23 +2918,44 @@ fi
 sudo chown root:root /etc/cron.daily/df-check
 sudo chmod 755 /etc/cron.daily/df-check
 -------------------------------------------------------------------------------------------------------
+Script to check that no security updates are pending
+
+sudo nano /etc/cron.daily/secupdate
+
+#!/bin/bash
+
+Name=$(hostname)
+Updates=$( /usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2 )
+Max=10
+
+if [ ${Updates%?} -ge ${Max%?} ]; then
+    mailbody="Pending Security updates at Virtual Machine ${Name}. Number of pending Updates: ${Updates}."
+    echo ${mailbody} | mail -s "Pending Security Updates Alert" oscar.lopez@globaleagle.com
+fi 
+
+sudo chown root:root /etc/cron.daily/secupdate
+sudo chmod 755 /etc/cron.daily/secupdate
+
+/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2 ----> Security Updates
+
+/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 1 ----> Regular Updates
+
+-------------------------------------------------------------------------------------------------------
+
+
 sudo nano /usr/share/netdata/web/PortChanTraffic.html
 var RELOAD_EVERY = 120;
 service netdata restart
 
-TO Display security updates but not installing:
+sudo unattended-upgrade --dry-run -d ---------> TO Display security updates but not installing:
 
-sudo unattended-upgrade --dry-run -d 
-
-Manually installing security updates:
-
-sudo unattended-upgrade -d -v
+sudo unattended-upgrade -d -v ------------> Manually installing security updates:
 
  
-------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 update netdata:
 
-cd /usr/share/netdata/web
+sudo su
 sudo nano PortChanTraffic.html
 var RELOAD_EVERY = 120;
 
@@ -2932,10 +2966,11 @@ Go to the '/var/log/unattended-upgrades' directory and check available logs
 Copying files between servers via SCP
 
 scp /home/administrator/ftp/Mwall.png opsengip@172.20.128.123:/home/opsengip/Pictures --> From server to destination
-
-scp administrator@10.200.8.17:/home/administrator/ftp/Mwall.png /home/administrator/Pictures/
+scp /home/administrator/ftp/Mwall.png opsengip@172.20.128.123:/home/opsengip/Pictures
+scp administrator@10.200.8.17:/home/administrator/ftp/Mwall.png /home/administrator/Pictures
 scp administrator@10.200.8.17:/home/administrator/ftp/Mwall.png /home/OpsEngIP/Pictures/ --> From destination to server
 
+scp /usr/share/netdata/web/GE_Logo.png administrator@172.20.144.251:/home/administrator/ftp/
 
 nc -vz smtp.gmail.com  587  ----> Ping IP address and port
 ----------------------------------------------------------------------------------
@@ -2954,15 +2989,18 @@ usefull statistics
 # sudo apt-get install htop
 # ps -ef | grep firefox
 # sudo nethogs (sudo apt install nethogs)
-date  ---> Displays date and time
-
+# date  ---> Displays date and time
+# nproc ---> displays the number of CPUs used
 Ubuntu/Linux version:
 
 cat /etc/os-release
 lsb_release -a
 hostnamectl
 Linux kernel version: uname -r
+ethtool eth1 ---> Shows duplex settings on card
 
+
+$ sudo apt-get upgrade linux-image-generic
 -----------------------------------------------------------------------------------------------
 To end  a telnet session
 
@@ -2971,7 +3009,7 @@ type quit
 
 --------------------------------------------------------------
  
-VS Code
+VS Code (VSC)
 Install:
 - Python
   Python Preview
@@ -2992,10 +3030,10 @@ Color Theme: Deepdark Material Theme | Full Black Version
 NETDATA:
 
 installation:
-sudo nano ~/.bashrc
 sudo su
 bash <(curl -Ss https://my-netdata.io/kickstart.sh)
-From SPC upload files 
+scp /usr/share/netdata/web/GE_Logo.png administrator@172.20.152.123:/home/administrator/ftp
+scp /usr/share/netdata/web/PortChanTraffic.html administrator@172.20.138.123:/home/administrator/ftp
 sudo mv /home/administrator/ftp/*.* /usr/share/netdata/web/
 cd /usr/share/netdata/web/
  sudo chown netdata GE_Logo.png
@@ -3054,16 +3092,333 @@ Comment=Postman GUI
 Categories=Development;Code;
 
 ----------------------------------------------------------------------------------
+Installing docker
+
+sudo apt install docker.io
+docker --version
+docker run hello-world
+
+sudo systemctl enable --now docker --> Optional
+
+--------------------------------------------------------------------------------------
+
+/dev/null is a special file called the null device in Unix systems. Colloquially it is also called the bit-bucket or the blackhole because it immediately discards anything written to it and only returns an end-of-file EOF when read.
+ 
+-----------------------------------------------------------------------
+
+Tail command
+
+The tail command print the last N number of data of the given input. By default it prints the last 10 lines of the specified files.
+
+tail [OPTION]... [FILE]...
+
+Options:
+  -n ---lines
+  -c ---bytes
+  -q ---quiet
+  -v ---verbose
+  -f ---follow
+
+PROGRAMMING:
+
+Creates a file with a single line:
+
+      echo hello there again > myfile.osc
+
+Creates 5 subdirectories at once:
+
+     for i in $(seq 5); do mkdir $i; done ----> creates 5 directories called 1 2 3 4 5 
+
+
+starting QoS 
+
+# FireQOS configuration file /etc/firehol/fireqos.conf
+# Fireqos script: /usr/sbin/fireqos
+sudo fireqos start (Wait 5 to 10 minutes then load graph)
+/usr/sbin/service netdata restart
+# /usr/share/netdata/web/bwtest.html 
+
+flent rrul_var -H 172.20.128.122 --test-parameter bidir_streams=7 --test-parameter markings=11,13,15,17,19,21,23
 
 
 
-monitor session 1 source interface Gi1/0/2 tx
-monitor session 1 destination remote vlan 223
-monitor session 2 source interface Gi1/0/2 rx
-monitor session 2 destination remote vlan 224
+ 
+GitHUB Cloning:
+
+https://github.com/tohojo/flent
+
+Press the cloning buttom
+
+locate in the desired subdirectory
+
+git clone <Pasted URL>
+
+------------------------------------------------------------
+Installing Flent from GitHub repository
+
+apt install python3-pip
+pip3 install setuptools
+python3 setup.py install
+
+-------------------------------------------------------
+
+sudo tcpdump -i ens160 -v -s0 -w test1.pcap
 
 
 
+scp /home/administrator/test1.pcap administrator@10.152.18.6:/home/administrator/test1.pcap --> From server to destination
+scp /home/administrator/usr/lib/netdata/conf.d/health.d/net.conf devnet@172.16.100.55:/home/devnet/ftp/net.conf
+
+Ununstalling packages installed with setup.py:
+
+$ pip3 freeze
+$ pip uninstall package.name.you.have.found ---> Ignore  the version part (whatever follows == or -).
+
+-------------------------------------------------------------
+
+sudo nano /etc/cron.daily/df-check-temp
+
+'/dev/sda5' for ENK 'dev/sda1' for BWT
+
+#!/bin/bash
+
+Name=$(hostname)
+current_usage=$( df -h | grep '/dev/sda5' | awk {'print $5'} )
+mailbody="Current HD occupancy at Virtual Machine ${Name} is : ${current_usage}."
+echo ${mailbody} | mail -s "Hard Drive Usage Alert" oscar.lopez@globaleagle.com
+
+sudo chown root:root /etc/cron.daily/df-check-temp
+sudo chmod 755 /etc/cron.daily/df-check-temp
+
+-------------------------------------------------------------------------------------
+
+sudo service httpd start
+?sudo service httpd stop
+?sudo service httpd restart
+
+sudo systemctl stop httpd
+sudo systemctl start httpd
+sudo systemctl restart httpd
+sudo systemctl unmask httpd
+
+sudo systemctl enable promisc
+sudo systemctl disable promisc
+
+------------------------------------------------------------------------------------------------
+
+Writing the output into the file
+
+The syntax is
+command > filename
+
+For example, send output of the ls command to file named foo.txt
+$ ls > foo.txt
+
+---------------------------------------------------------------------------------------------------
+
+Cheks if a package is installed:
+
+$ apt -qq list awscli
+awscli/stable,now 1.4.2-1 all [installed]
+
+----------------------------------------------------------------------------------------------------
+
+userdel -r <username> -------> removes a user account
+sudo killall -u <username> ---> Same in case the user is logged in  
+
+---------------------------------------------------------------------------------------------------
+ Reinstalling netdata
+
+sudo su
+
+bash <(curl -Ss https://my-netdata.io/kickstart.sh) --stable-channel --reinstall
+
+--------------------------------------------------------------------------------
+
+ Command to check pending security updates
+
+/usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2
+
+------------------------------------------------------------------------------
+
+Enabling copy/Paste on ESXi 6.5:
+
+Power off the VM.
+Enable the Copy & Paste for the Windows/Linux virtual machine:
+
+    Right-click the virtual machine and click Edit Settings.
+    Click the VM Options tab, expand Advanced, and click Edit Configuration.
+
+isolation.tools.copy.disable          FALSE
+isolation.tools.paste.disable         FALSE
+isolation.tools.setGUIOptions.enable  TRUE -----> 6.7
+
+--------------------------------------------------------------------------------
+
+Renewing Eval license on esxi
+
+- ssh to host
+- rm -r /etc/vmware/license.cfg  --> Removes current license
+- cp /etc/vmware/.#license.cfg /etc/vmware/license.cfg --> Copy over the new evaluation license, which is already on the host
+- /etc/init.d/vpxa restart ---> Restart ESXi services
+- Apply:
+vim-cmd vimsvc/license --show
+vim-cmd vimsvc/license --set=00000-00000-00000-00000-00000
+vim-cmd vimsvc/license --show
+
+----------------------------------------------------------------------------------------------
+ To export OVAs from different esxi versions:
+
+ - Select the SecureAuthIdPAppliance-2012r2-vmware.X.0-vX.X-XXXXXXXX.ova file and use 7-Zip or WinZip to extract its contents to a folder of the same name, without the file extension – that is: SecureAuthIdPAppliance-2012r2-vmware.X.0-vX.X-XXXXXXXX
+
+ -The folder should contain the following extracted contents: .vmdk files, .ovf file, and .mf file
+
+ - Right-click the .ovf file and edit it in a text editor such as Notepad
+
+ - Find the line <vssd:VirtualSystemType>vmx-##</vssd:VirtualSystemType> and change the vmx-## value --> 13 = 6.5 | 14 = 6.7
+
+       – e.g. change vmx-10 to vmx-09, or to a different hw-version working with the ESXi
+
+ - Save changes to the .ovf file and close the file
+
+ - OPTIONAL: Calculate the SHA-1 hash of the .ovf file and replace the hash value in the .mf file
+
+    NOTE: Removing the .mf file from the OVF file structure (folder) typically works
+
+6. Import the OVF template, as customary, in the environment
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Quick command for converting line ending:
+
+dos2unix thescript.sh
+
+-----------------------------------------------------------------------------------------------------
+
+Removing Docker
+
+sudo apt-get purge -y docker-engine docker docker.io docker-ce  
+sudo apt-get autoremove -y --purge docker-engine docker docker.io docker-ce  
+sudo umount /var/lib/docker/
+sudo rm -rf /var/lib/docker /etc/docker
+sudo rm /etc/apparmor.d/docker
+sudo groupdel docker
+sudo rm -rf /var/run/docker.sock
+sudo rm -rf /usr/bin/docker-compose
+-------------------------------------------------------------------------------
+
+New release '20.04.2 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+-----------------------------------------------------------
+New PW:
+
+Administrator / Gl0b@l3agle$
+opsengip / Gl0ba1_2021! ---> ENK
+OpsEngIP / Gl0ba1_2021! ---> BWT
 
 
+C:\Program Files (x86)\VMware\VMware Remote Console\vmrc.exe vmrc://[USERNAME]@[VC]/?moid="vm-324"
+
+----------------------------------------------------------------------------------------------------------
+
+SPAN CONFIG HUB_SW_1:
+
+interface Ethernet1/41
+  description Super Micro ETH0 (vmnic3 ac:1f:6b:6e:90:31) SPAN-MON-SW1
+  switchport monitor
+
+monitor session 1 
+  description SPAN-MON-@-SW1-Port-Channels
+  source interface port-channel1 both
+  source interface port-channel2 both
+  destination interface Ethernet1/41
+  no shut
+
+SPAN CONFIG HUB_SW_2:
+
+interface Ethernet1/41
+  description Super Micro ETH0 (vmnic3 ac:1f:6b:6e:90:31) SPAN-MON-SW1
+  switchport monitor
+
+monitor session 1 
+  description SPAN-MON-@-SW2-Port-Channels
+  source interface port-channel1 both
+  source interface port-channel2 both
+  destination interface Ethernet1/41
+  no shut
+
+----------------------------------------------------------------------------------------
+
+Uninstall ntopng
+
+curl -s https://raw.githubusercontent.com/ntop/packager/master/uninstall_all_ntop_packages.sh | sudo bash
+
+Install ntopng
+
+apt-get install pfring
+apt-get install pfring-dkms nprobe ntopng n2disk cento 
+
+--------------------------------------------------------------------------------------------------
+Installing lftp to transfer large files:
+
+sudo apt-get install lftp
+
+Transferring large files: 
+
+administrator@ENK-LAB-01:~/ftp$ lftp administrator@10.200.8.31
+
+lftp administrator@10.200.8.31:~> cd ftp
+
+lftp administrator@10.200.8.31:/ftp> pget -n 10 test.txt
+
+
+md5sum ENK_Sniffer_1.1-disk1.vmdk
+
+--------------------------------------------------------------------------------------------------------------------------
+
+nternet Speed Test
+
+Make sure the file you use in your test is > 50mb to get good results. Dependancies: sudo apt-get install lftp iperf Show Sample Output
+
+lftp -e 'pget http://address_to_file; exit; '
+\---------------------------------------------------------------------------------------------------------------
+
+RDP
+
+sudo apt install vino
+sudo apt install xrdp
+systemctl enable xrdp
+systemctl status xrdp
+
+sudo vi NetworkManager.conf
+  
+    [ifupdown]
+    managed=true
+
+on 01-network-manager-all.yaml
+
+   network:
+    renderer: NetworkManager
+    ethernets:
+
+Restart VM
+
+---------------------------------------------------------------------------------------------
+
+sudo nano /etc/cron.daily/no_sec_ipadd
+
+
+#!/bin/bash
+
+dhclient -r
+dhclient -r
+dhclient ens160
+
+
+
+sudo chown root:root /etc/cron.daily/no_sec_ipadd
+sudo chmod 755 /etc/cron.daily/no_sec_ipadd
+
+----------------------------------------------------------------------------------
 
