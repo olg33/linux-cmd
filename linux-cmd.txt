@@ -1,5 +1,19 @@
+New PWDs:
+Administrator / Gl0b@l3agle$
+opsengip / Gl0ba1_2021! ---> ENK
+OpsEngIP / Gl0ba1_2021! ---> BWT
+
+OLD PW:
+administrator / oeIP2019! --> BWT
+administrator / mtn33024 --> ENK
+
 sudo nano /etc/netplan/01-network-manager-all.yaml
 sudo nano /etc/netplan/00-installer-config.yaml ---> Ubuntu server
+cat /etc/netplan/00-installer-config.yaml
+
+Copy/Paste/Cut Text in Nano
+To mark a text press Ctrl + ^ then move the cursors with the arrow keys. 
+To copy the marked text press Alt + ^. To cut the marked text press ^K (Ctrl +K)
 
 # Extracting files
 tar -xvzf community_images.tar.gz
@@ -18,7 +32,7 @@ $ gunzip file.gz
 dpkg -i package-name-here.deb
 dpkg --install package-name-here.deb
 dpkg -i -R /path/to/dir/name/with/lots/of/dot-deb-files/
-dpkg -i --recursive /path/to/dir/name/with/lots/of/dot-deb-files/
+dpkg -i --recursive /path/to/dir/name/with/lots/of/dot-deb-files/F
 
 sudo nano /etc/netplan/01-network-manager-all.yaml
 ------------------------------------------------------------------------------------------
@@ -51,6 +65,11 @@ adduser <name>
 usermod -aG sudo <name>
 
 ---------------------------------------------------------
+Moving Subdirectories to another one:
+
+sudo mv /home/oscar/Python/* /home/oscar/Python/Examples/
+
+
 How to Set File Permissions:
 
 - u  g  o
@@ -78,7 +97,7 @@ sudo chown new-owner  <filename>
 
 How to Change Group Ownership of a File: (second)
 
-sudo chgrp group <filename>sudo unattended-upgrade -d -v
+sudo chgrp new-group <filename>
 
 
 cp -R Pictures Pictures_backup  ---> Copies folder Pictures to Pictures_backup
@@ -277,7 +296,10 @@ echo $SHELL     Displays the shell used
 ps -p $$         Same
 echo $0          Same
 
-
+To change to bash:
+chsh -s /bin/bash
+-Reset after this
+ 
 --------------------
 
 free     Checks memory usage
@@ -657,7 +679,15 @@ Typical test:
  iperf3 -c 10.111.40.252 -i 1 -t 60 -b 30M -w 1.9M -P 8 -R ----> Downstream
 
 
-10.111.40.252
+30,000*542 /8 = 2M
+-------------------------------------------------------------------------------
+
+Prima
+
+./iperf3 -c 172.20.142.122 -t 120 -b 40M -P 2 -R -----> WORKS Better
+/usr/local/bin/iperf-3.9/src/./iperf3 -c 10.112.42.60 -t 30 -b 40M -P 2 -----------------> Vlan 2 Raisting
+
+./iperf3 -c 10.112.44.60 -t 120 -b 40M -P 2 -R
 -----------------------------------------------------------------------------------------
 
 
@@ -691,16 +721,23 @@ and you may want to try using the iperf3 -w option to set the window even larger
 Killing the iperf daemon
 
 ps -ef | grep iperf3
+
 adminis+ 10282 28312  0 17:25 pts/1    00:00:00 grep --color=auto iperf3
 root     30075     1  0 Apr04 ?        00:00:11 iperf3 -s -D
 
 ps aux | grep iperf3
 
-kill -11 pid
+kill -9 30075
 
+-----------------------------------------------------------------------------------------------------------------------
 
+Public iperf3 servers
 
+iperf.volia.net ----> Default port 5201  (could get up to 350M Down / 226 Up
 
+ping.online.net -------> Use Port 5200 (coould get 179/178M )
+
+-----------------------------------------------------------------------------------------------------------------------
 
 netperf -H <IP Address> -p <port> -l <seconds> -------> Client
 
@@ -718,36 +755,8 @@ netserver -p 16604 -----------------------------------> Server
 tcp        0      0 :::16604        :::*                  LISTEN      3624/netserver
  
 -------------------------------------------------------------------------------------------
-
-TFTP Server implemntation
-
-
-maker sure to change the tftp folder with: chmod 777 <root subdirectory 
-
-service tftpd-hpa status
-                  stop
-                  start
-                  restart
-                  force-reload
-
-Files Folder: /srv/tftp
-Config:       /etc/default/cd /etc
-
-
-TFTP Client Implementation
-
-apt-get install tftp
-
-tftp <IP Address of TFTP server>
-
-tftp get <File name>
-tftp put <file name>
-
------------------------------------------------------------------------------------------------
  
- 
- 
-Running VS Code ar root
+Running VS Code as root
 
 sudo code --user-data-dir=/home/oscar/Python
 
@@ -805,11 +814,6 @@ network:
           addresses: [10.10.10.1, 1.1.1.1]
 
 -------------------------------------------------------
-
-Changing IP address on EVE-NG
-
-rm -f /opt/ovf/.configured
-
 
 ESXi Teleports license: 1N617-AU29J-J8U81-093K6-0RW0N
 
@@ -977,33 +981,50 @@ export PS1="\e[1;36m[\u@\h \W]\$ \e[m "
 ubuntu mono 13
 PS1
 --------------------------------------------------------------------
-Configuring TFTP Server
+Installing & Configuring TFTP Server
 
-apt-get install tftp-hpa 
-apt-get install tftpd-hpa
+sudo apt-get install tftpd-hpa
 
-# /etc/default/tftpd-hpa
+sudo systemctl status tftpd-hpa
 
-Default Config:
+- Configuring server:
+sudo nano /etc/default/tftpd-hpa
+
+- Customized config Config:
 
 TFTP_USERNAME="tftp"
-TFTP_DIRECTORY="/var/lib/tftpboot"
+TFTP_DIRECTORY="/home/OpsEngIP/Config_Backups"
 TFTP_ADDRESS=":69"
-TFTP_OPTIONS="--secure --create" ----> ADD
+TFTP_OPTIONS="--secure --create"
 
-Files are located at in the /var/lib/tftpboot ---> chmod 777 tftpboot
 
-Finally restart tftp: /etc/init.d/tftpd-hpa restart
+- Changing settings on folder:
+
+sudo chown tftp:tftp //home/OpsEngIP/Config_Backups
+
+- Restart tftp: 
+ sudo systemctl restart tftpd-hpa
+-------------------------------------------------------------------------------
+Installing TFTP Client
+
+ sudo apt install tftp-hpa
+
+to run client: tftp <IP address>
+activate verbose: tftp>verbose
+Now, to upload a file (rancheros.iso) from the current working directory (from where you ran tftp command), run the following command:
+tftp> put rancheros.iso
 
 --------------------------------------------------------------------
-Configuring TFTP Server
+Copyng files from cisco to tftf server
 
-sudo apt-get install vsftpd ----> Install
-
-sudo nano /etc/vsftpd.conf -----> Open Config file
-
---------------------------------------------------------------------
-Configuring FTP ServerF
+#kron policy-list conf_bkp
+#cli show running-config | redirect tftp://10.214.8.121/home/OpsEngIP/Cisconfigs/MIR_LAB_01.rt
+#exit
+#kron occurrence conf_bkp_Schedule at 23:59 recurring
+#policy-list conf_bkp
+-----------------------------------------------------------------------
+ 
+Configuring FTP Server
 
 apt-get install vsftpd
 
@@ -1037,6 +1058,8 @@ sudo mkdir -p /home/OpsEngIP/ftp
 sudo chmod 750 /home/OpsEngIP/ftp
 sudo chown -R OpsEngIP: /home/OpsEngIP/ftp
 
+- To ensure new user will have bash shell:
+sudo usermod -s /bin/bash OpsEngIP
  
 service vsftpd start ---> Start
 service vsftpd restart
@@ -1155,6 +1178,8 @@ or you can use the shorter version of the command:
 
 OVF Tool:
 
+******* PC ************************************
+
 cd \Program Files\VMware\VMware OVF Tool\
 
 
@@ -1175,27 +1200,33 @@ ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_LAB_1
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=RAI-04_BW_Test_FTP "C:\BW_Test_Teleport_1.5\BW_Test_Teleport_1.5.ovf" vi://172.20.154.120
 
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=BW_Test_Teleport_2.0 "C:\BW_Test_Teleport_2.0\BW_Test_Teleport_2\BW_Test_Teleport_2.ovf" vi://172.20.152.120
-
-
 ovftool.exe vi://10.200.8.28/BW_Test_IO_ND "C:\BW_Test_IO_ND_6_7.ovf" 
 ovftool.exe vi://10.200.8.28/BW_Test_TG "C:\BW_Test_TG_6_7.ovf"
 
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=BW_Test_IO_ND "C:\BW_Test_IO_ND_6_7.ovf" vi://10.152.18.52
-ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=BW_Test_IO_ND C:\BW_Test_TG_6_7\BW_Test_TG_6_7\BW_Test_TG_6_7.ovf vi://10.152.18.52
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=BW_Test_IO_ND C:\BW_Test_TG_6_7\BW_Test_TG_6_7\BW_Test_TG_6_7\.ovf vi://10.152.18.52
 
 ovftool.exe vi://10.200.8.28/ENK_Sniffer_2.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf"
 
-
 ovftool.exe vi://10.200.8.28/ENK_Sniffer_1.0 "C:\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf"
 
-ovftool.exe vi://10.200.8.28/BW_Test_Teleport_1.5 "C:\BW_Test_Teleport_1.5\BW_Test_Teleport_1.5.ovf"
+ovftool.exe vi://10.200.8.28/BW_Test_Teleport_1.5 "C:\Images IOS VMs and OVAs\Virtual Machines\BW_Test_Teleport_1.5.ovf"
 
 ovftool.exe vi://10.152.18.52/BW_Test_IO_ND "C:\BW_Test_IO_ND.ovf"
 
 ovftool.exe vi://10.200.8.28/ENK_Sniffer_2.0 "C:\ENK_Sniffer_2.0\ENK_Sniffer_2.0.ovf"
 
-ovftool.exe vi://10.200.8.28/BW_Test_Teleport_2.0 "C:\BW_Test_Teleport_2.0\BW_Test_Teleport_2.0"
+ovftool.exe vi://10.200.9.7/BW_Test_Teleport_2.1 "C:\Images IOS VMs and OVAs\Virtual Machines\BW_Test_Teleport_2.1.ovf"  --> Latest Server to PC
 
+ovftool.exe -ds=datastore1 --net:"VM Network"="Man_Windows" -dm=thin -n=MIR_LAB-01_BW_Test_FTP_V2.1 "C:\Images IOS VMs and OVAs\Virtual Machines\BW_Test_Teleport_2.1\BW_Test_Teleport_2.1.ovf" vi://10.214.8.120 --> Latest PC to Server
+
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=BW_Test_Teleport_2.1 "C:\BW_Test_Teleport_2.0\BW_Test_Teleport_2\BW_Test_Teleport_2.ovf" vi://172.20.152.120 
+
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=BW_Test_FTP_V2.1 "C:\Images IOS VMs and OVAs\Virtual Machines\BW_Test_Teleport_2.1\BW_Test_Teleport_2.1.ovf" vi://172.20.150.120
+
+ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" --overwrite -dm=thin -n=ENK_Sniffer_1.1 "C:\Images IOS VMs and OVAs\Virtual Machines\\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf" vi://172.20.150.120
+
+C:\Images IOS VMs and OVAs\Virtual Machines\ENK_Sniffer_1.1\ENK_Sniffer_1.1.ovf
 
 How to copy VMS between ESXi Hosts:
 
@@ -1206,6 +1237,22 @@ ovftool.exe -ds=<dest-datastorename> vi://<source-esxi-host-name/vm-name> vi://<
 ovftool.exe -ds=datastore1 --net:"VM Network"="VM Network" -dm=thin -n=ENK_Sniffer_1.0 vi://10.200.8.28/ENK_Sniffer_1.0 vi://172.20.130.120	
 
 ovftool.exe -ds=datastore1 -dm=thin -n=BW_Test_IO_ND "C:\BW_Test_IO_ND "C:\BW_Test_IO_ND.ovf"" vi://10.200.8.18
+
+
+******************** LINUX ****************************************************
+To install:
+ sudo sh ./VMware-ovftool-4.4.1-16812187-lin.x86_64.bundle
+
+To Export:
+ovftool vi://10.200.8.28/BW_Test_Teleport_2.0 "/home/administrator/OVFs/BW_Test_Teleport_2.0/BW_Test_Teleport_2.0.ovf" ------> puts files on /BW_Test_Teleport_2.0 directory (needs to be created first)
+ovftool vi://10.200.8.28/BWT_ESXi_6.0_V2 "/home/administrator/OVFs/BWT_ESXi_6.0_V2/BWT_ESXi_6.0_V2.ovf"
+
+- install if not present:
+  sudo apt install ucommon-utils
+  
+  md5sum ENK_Sniffer_1.1-disk1.vmdk > checkmd5.md5 ------> copies hash to file
+
+
 --------------------------------------------------
 HOW TO Clone A VM HD
 
@@ -1305,26 +1352,53 @@ background-position: center;
 ---------------------------------------------------------------------------------------------
 Running a script or command at startup using /etc/rc.local
 
-You can check the status if you type the following command in terminal:
+- Create a file:
 
-sudo systemctl status rc.local
+sudo nano /etc/systemd/system/rc-local.service
 
-First you need to create /etc/rc.local file, if it doesn't exists.
+Then add the following content to it.
 
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
+
+[Service]
+ Type=forking
+ ExecStart=/etc/rc.local start
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
+ SysVStartPriority=99
+
+[Install]
+ WantedBy=multi-user.target
+
+- Create a file:
 sudo nano /etc/rc.local
 
-Make sure /etc/rc.local file is executable.
-sudo chown root /etc/rc.local
+- Add commands:
+
+#!/bin/bash
+
+#Set Promiscuous mode
+
+/sbin/ip link set dev ens192 promisc on
+/sbin/ip link set dev ens224 promisc on
+/sbin/ip link set dev ens256 promisc on
+
+- Next, run the following command to make sure /etc/rc.local file is executable.
+
 sudo chmod +x /etc/rc.local
+sudo chown root /etc/rc.local
 
-Finally, enable the service on system boot.
+- After that, enable the service on system boot:
 
-sudo systemctl enable rc.local
+sudo systemctl enable rc-local
 
-echo "$SHELL" -----> return the shell being used
+- Reboot or start service
 
-
-sudo nano /etc/rc.local
+sudo systemctl start rc-local.service
+sudo systemctl status rc-local.service
 
 #!/bin/bash
 #
@@ -1354,6 +1428,8 @@ Location of Ubuntu Logo in login screen:
 
 
 Changing Background Image:
+
+Use the backround utility in Activities
 
 # cd /usr/share/backgrounds
 # sudo mv warty-final-ubuntu.png warty-final-ubuntu.png.bakcd /usr/share/plymouth
@@ -1554,6 +1630,7 @@ sudo nano /etc/network/interfaces
 
 Un: administrator
 Pw: oeIP2019!
+elk: mtn33024
 
 Un: OpsEngIP
 Pw: mtn33025
@@ -1675,9 +1752,10 @@ On the router:
 - Create hostname
 - Create Domain name: ip domain-name mtnsat.net 
                       ip domain name mtnsat.net ---> IOS-xe
-- username administrator privilege 15 secret mtn33025 -----> UN must match the one in the server
+- username administrator privilege 15 secret mtn33024 -----> UN must match the one in the server
 - Generate key:
     crypto key generate rsa usage-keys label administrator modulus 2048
+    ip ssh version 2
     ip ssh rsa keypair-name administrator
     
 - line vty 0 4
@@ -1704,9 +1782,6 @@ On the Server:
 - cd /home/administrator/.ssh/
 administrator@TEL-01:~/.ssh$ ls
 id_rsa  id_rsa.pub  known_hosts  known_hosts.old
-
-
-Idle-PC IOS Value: 0x6062e5c0
 
 -------------------------------------------------------------------------------------------------------------------------------
 CONNECTING TO A CISCO ROUTER VIA SSH PUBLIC KEY
@@ -1795,8 +1870,9 @@ IF copyng public key via copy/paste:
 CONNECTING TO A NEXUS SWITCH VIA SSH USING PASSWORD
 
 Create user:
+feature ssh
 
-username administrator password huemac86 role network-admin
+username administrator password mtn33024 role network-admin
 username administrator keypair generate rsa 2048 force 
 
 
@@ -2080,41 +2156,67 @@ python3 setup.py install
 
 -------------------------------------------------------------------
 
-Uploading a project to GitHub:
+Generating a personal access token in Github
+
+- Go to Settings
+ - Developer Settings (lower left)
+
+ - Personal access token
+
+- Personal Access Tokens
+
+- Tokens (Classic)
+
+-  Generate New token
+
+- Copy Token
+ - Expires: Jun 22 2023 -->  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
+ 
+
+ Uploading a project to GitHub:
 
 - To reset a repository:
 
-rm -rf .git
+sudo rm -rf .git
 
 - Create Repository
 
 - Change the current working directory to your local project.
 
 - Initialize the local directory as a Git repository
-   $ sudo git init
+   sudo git init
 
 - Add the files in your new local repository. This stages them for the first commit.
    sudo git add .
+   git status ---> shows files and folders included
 
 - Add personal info:
-    $ git config --global user.email oscar.lopez@globaleagle.com
+    sudo git config user.email oscar.lopez@anuvu.com
 
 - Commit the files that you've staged in your local repository
-    $ sudo git commit -m "second commit" 
+    sudo git commit -m "first commit" 
 
 - In the Command prompt, add the URL for the remote repository where your local repository will be pushed
-    $ sudo git remote add <ND_IO_Files> https://github.com/olg33/<ND_IO_Files>.git
-      sudo git remote add lnx https://github.com/olg33/Linux.git
-      sudo git remote add ans https://github.com/olg33/Ansible.git
-
+ 
+   sudo git remote add lnx https://github.com/olg33/Linux-cmd.git ---> Only the first time when createdOutg
+ 
 - Verify the new remote 
     $ sudo git remote -v
 
 - Push the files in your local repository to GitHub.
-    $ sudo git push ND_IO_Files master
+ 
       sudo git push lnx master
+             or
       sudo git push -f 
-     olg33/Acam@pich85100   
+     olg33/(Personal access Token) 
+
+
+UPDATE:
+
+sudo git config --global user.name "olg33"
+sudo git config --global user.email "oscar.lopez@globaleagle.com"
+sudo git config -l
+
 
 
 ----------------------------------------------------------
@@ -2169,7 +2271,7 @@ starting QoS
 
 # FireQOS configuration file /etc/firehol/fireqos.conf
 sudo fireqos start (Wait 5 to 10 minutes then load graph)
-/usr/sbin/service netdata restart
+sudo /usr/sbin/service netdata restart
 # /usr/share/netdata/web/bwtest.html 
 
 flent rrul_var -H 10.111.39.122 --test-parameter bidir_streams=7 --test-parameter markings=11,13,15,17,19,20,1
@@ -2222,7 +2324,7 @@ $ sudo apt-get install \
 2.- Add Docker’s official GPG key:
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
+ Piano Sonata No.2 and 3
 
 3.- Use the following command to set up the stable repository.
 
@@ -2258,11 +2360,11 @@ Enabling rsyslog
 
 # provides UDP syslog reception
 module(load="imudp")
-input(type="imudp" port="514") --->Default port
+input(type="imudp" port="5140") --->Default port 514 is a privileged port so the system can't bind to it unless Logstash is running as the root user. Use 5140 instead 
 
 # provides TCP syslog reception
 module(load="imtcp")
-input(type="imtcp" port="514")
+input(type="imtcp" port="5140")
 
 
 * By default Cisco devices forward syslog messages with default facility of local7
@@ -2270,10 +2372,17 @@ input(type="imtcp" port="514")
 local6.* /var/log/cisco.log
 
 2- Create file:  /var/log/cisco.log
+   sudo chmod 666 cisco.log
 
-3- Restart service: sudo service rsyslog restart
+3- make syslog listen to messages from remote machines:
+   edit /etc/default/syslogd to include the -r option:
+   SYSLOGD="-r"
 
-4- Check servicestatus: service rsyslog status
+4- Restart service: sudo service rsyslog restart
+
+5- Check servicestatus: service rsyslog status
+
+6.- Test:  sudo logger -p local6.debug "is this working?"
 
 on the Router:
 
@@ -2281,6 +2390,35 @@ logging trap debugging
 logging facility local6 ---> Default is local7
 logging 10.200.8.14
 
+ASR1001HRT-01
+no logging source-interface Loopback0
+no logging host 172.16.11.64
+logging trap notifications
+logging origin-id hostname
+logging facility local6
+logging source-interface Port-channel1.1000
+logging host 172.20.128.123 transport udp port 5140
+
+
+ASR1001HRT-02
+no logging source-interface Loopback0
+no logging host 172.16.11.64
+logging trap notifications
+logging origin-id hostname
+logging facility local6
+logging source-interface Port-channel2.1000
+logging host 172.20.128.123 transport udp port 5140
+
+NEXUS HSW
+
+logging server 172.20.128.123 port 6141 facility local6
+logging server 172.20.128.123 6
+logging origin-id hostname
+
+
+
+Note: A maximumof 4 remotesyslog serverscan be configured.The remotesyslog server can be specifiedusingits IP addressor DNS name. 
+The default protocol for sending syslogs is UDP with a defaultport of 514. For TCP, the defaultport is 601
 ---------------------------------------------------------------------------------------------
 Flush and renew dhcp lease
 
@@ -2311,6 +2449,11 @@ http.port: 9200
 - sudo systemctl start elasticsearch
 - To test:
   curl -X GET http://localhost:9200/
+
+If can't connect, try:
+
+sudo systemctl restart elasticsearch
+
  
 To delete ES:
 	
@@ -2356,58 +2499,77 @@ Because Kibana is configured to only listen on localhost, we must set up a rever
 
 Logstash:
 - Download from https://www.elastic.co/downloads/logstash
+  or:  curl -o logstash-7.13.4-amd64.deb https://artifacts.elastic.co/downloads/logstash/logstash-7.13.4-amd64.deb
 - install .dev file sudo dpkg -i 
 - sudo /usr/share/logstash/bin/logstash-plugin update
 - sudo /usr/share/logstash/bin/logstash-plugin install logstash-codec-sflow
-- sudo nano /etc/logstash/conf.d/cisco.conf
+- sudo nano /etc/logstash/conf.d/ciscologger.conf
 
 input {
+  udp {
+    port => 5140
+    type => "IOS-XE"
+      }
+  udp {
+    port => 6141
+    type => "NXOS"
+      }
+ }
 
- udp {
-   port => 5003
-   type => "syslog"
- }
- udp {
-   port => 2055
-   codec => "netflow"
- }
-}
 
 filter {
+    grok {
+        match => { "host" => "%{IPV4:IP_Address}" }
+         }
 
-  dissect {
-    mapping => { "message" => "<%{local_seq_num}>%{src_seq_num}: %{ts} %{+ts} %{+ts}:%{+ts}:%{+ts}.%{+ts}: %%{facility}-%{severity}-%{mnemonic}: %{description}"} } date { match => ["ts", "MMM dd HH:mm:ss.SSS" ] remove_field => [ "ts" ]
-  }
-
-}
+  if [type] == "IOS-XE"
+         {
+           grok {
+                  match =>  { "message"=> "(?<N_SEQ>\<\d+\>\d+\:) (?<Hostname>\w+.\w+\:) (?<TIME_UTC>.*\s+\d+\s+\w+\:\d+\:\d+\.\d+\:) %{GREEDYDATA:Event}" }
+                }
+         }
+  if [type] == "NXOS"
+         {
+           grok {
+                  match => { "message"=> "(?<N_SEQ>\<\d+\>)(?<Hostname>\w+.\w+\:) (?<TIME_UTC>.*\s+\w+\s+\d+\s+\d+\:\d+\:\d+\s+\w+\:) %{GREEDYDATA:Event}" }
+                }
+         }
+      }
 
 output {
-
- stdout {
-   codec => rubydebug
+    elasticsearch {
+      hosts => ["localhost:9200"]
+      sniffing => true
+      index => "cisco-%{+YYYY.MM.dd}"
+       }
  }
 
-if [type] == "syslog" {
-   elasticsearch {
-     hosts => ["192.168.0.146:9200"]
-     index => "ciscologger-%{+YYYY.MM.dd}"
-   }
- } 
+ 
+----------------------------------------------------------------------------------
 
- if [type] == "netflow" {
-   elasticsearch {
-     hosts => ["192.168.0.146:9200"]
-     index => "cisconetflow-%{+YYYY.MM.dd}"
-   } 
- }
+For troubleshooting:
 
-}
+tail -f /var/log/logstash/logstash-plain.log
+
+
+- Cisco Syslog Message Format:
+
+2021-07-09T19:10:48.953276-04:00 10.214.8.5 GE_HUB1_INT_SW2.MIR: 2021 Jul  9 23:10:48 UTC: %ETHPORT-5-IF_DOWN_ADMIN_DOWN: Interface Ethernet1/38 is down (Administratively down)
+
+|     Time Stamp w/time zone     |Source IP|   hostname         | Time Stamp UTC          | Facility-severity-mnemonic | Description
+
 
 - Test: /usr/share/logstash/bin/logstash --config.test_and_exit -f /etc/logstash/conf.d/cisco.conf
 
 - To check logs:/var/log/logstash$ nano logstash-plain.log 
 - To debug:sudo /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/cisco.conf --debug
  
+IN Kibana:
+
+- Go to Index Patterns
+- Create Index Pattern 
+
+
 
 ELASTICSEARCH:
 
@@ -2475,27 +2637,25 @@ xpack.monitoring.collection.enabled: true
 
 
 -------------------------------------------------------------------------------------
-Speedtest Installation bwtest
+Speedtest Installation bwtest /usr/local/
 
-- sudo apt-get install -y git-core
-- sudo apt install apache2 php
-- git clone https://github.com/adolfintel/speedtest.git
-- cd speedtest
-- sudo cp -R backend *.js /var/www/html/
-- cd /var/www/html
-- sudo mv /home/administrator/Downloads/*.* /var/www/html/
-- sudo chown -R www-data *
+sudo apt update
+sudo apt-get install -y git-core
+sudo apt install -y apache2 php
+sudo git clone https://github.com/adolfintel/speedtest.git
+cd /var/www/
+sudo rm -rfv html
+sudo git clone https://github.com/olg33/html
+cd html
+sudo chown -R www-data *
+sudo nano index.html
+TEST:
+sudo cp -R backend example-singleServer-chart.html *.js /var/www/html/
+sudo mv example-singleServer-chart.html index.html
+sudo chown -R www-data *
 
----------------------------------------------------------------------------------------------
+sudo cp  example-singleServer-customSettings.html /var/www/html/index.html
 
-To check resources utilization:
-
-- $ free
-- $ htop (apt install)
-
-loader > boot bootflash:nxos.9.2.1.bin
-
--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 
 Ntopng Installation
@@ -2518,7 +2678,7 @@ add
   ntopng -F “es;flows;ntopng-%Y.%m.%d;http://10.200.8.12:9200/_bulk;”
   ntopng -F "es;ntopng;ntopng-%Y.%m.%d;http://localhost:9200/_bulk;"
  
-/etc/ntopng/ntopng.conf
+ sudo systemctl restart ntopng
 
 ------------------------------------------------------------------------------
 killing a process with top
@@ -2555,11 +2715,11 @@ Location of Ubuntu Logo in login screen:
 
 /usr/share/plymouth/ubuntu-logo.png
 
-wget https://github.com/PRATAP-KUMAR/focalgdm3/raw/master/focalgdm3.sh
+git clone https://github.com/PRATAP-KUMAR/focalgdm3.git
 
  sudo apt install libglib2.0-dev
 
-sudo /bin/bash focalgdm3.sh --set
+sudo ./focalgdm3/focalgdm3 --set
 
 color: #03396C
 
@@ -2667,13 +2827,13 @@ oeIP2019!
 
 a. Create a domain name:
 hostname -f
-- sudo nano /etc/hostname
+- sudo nano /etc/hostname  
 - sudo nano /etc/hosts
  127.0.0.1    localhost
  127.0.1.1    hol.01.bwt
 
 Restart or:
-sudo sysctl kernel.hostname=rai.05.enk
+sudo sysctl kernel.hostname=rai.07.enk
 
 --------------------------------------------------------------------------------
 a1. If installing a BWT VM at HOL, add a static route for the smtp relay host:
@@ -2690,7 +2850,7 @@ sudo apt-get install -y mailutils
 
 to re-configure: dpkg-reconfigure postfix
 
-c. ***********Configure postfix (IF USING GMAIL SMTP RELAY HOST)***********************
+c. ##########Configure postfix (IF USING GMAIL SMTP RELAY HOST)########################
  ######################################################################################
  Note: If postfix config window needs to be re-launched, type: dpkg-reconfigure postfix
  - Internet Site
@@ -2742,18 +2902,11 @@ c. **************************Configure postfix (IF USING HOLMDEL SMTP RELAY HOST
 sudo nano /etc/postfix/main.cf
 ===========================================================================
 # TLS parameters
-smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
-smtpd_use_tls=yes
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-
-smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+ 
 myhostname = mir.04.bwt
-alias_maps = hash:/etc/aliases
-alias_database = hash:/etc/aliases
-myorigin = /etc/mailname
+ 
 # mydestination = $myhostname, BWT-MIR-04-LAST.globaleagle.com, localhost.globaleagle.com, , localhost
+#mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
 relayhost = [216.7.159.196]:25
 relayhost = [holmail02.mtnsat.com]:25
 message_size_limit = 0
@@ -2781,16 +2934,17 @@ if icmp is not enabled, try:
 - telnet 216.7.159.196 25
 To see mail queue:
 sendmail -bp
+Mail logs: nano /var/log/mail.log
 *********************************************************************************************************************************
 d. Rename administrator account
  
-sudo chfn -f "rai.04.bwt" administrator
+sudo chfn -f "rai.07.enk" administrator
 
 e. create canonical address mapping
 
 sudo nano /etc/postfix/canonical
 
-administrator@rai.05.enk  rai.05.enk@globaleagle.com
+administrator@rai.06.enk  rai.06.enk@globaleagle.com
 
 f. execute postmap against canonical file
 
@@ -2803,7 +2957,7 @@ or
 
 h. Test
 
- echo testing account, please disregard. | mail -s "testing" oscar.lopez@globaleagle.com
+ echo testing account, please disregard. | mail -s "testing" oscar.lopez@anuvu.com
 
 
 
@@ -2821,6 +2975,11 @@ fi
 sudo chown root:root /etc/cron.daily/reboot-check
 sudo chmod 755 /etc/cron.daily/reboot-check
 
+
+To test:
+
+   run-parts /etc/cron.daily
+
 --------------------------------------------------------------------------------------------------------------
 
 Unattended upgrades config
@@ -2834,11 +2993,11 @@ b) Run
 sudo dpkg-reconfigure -plow unattended-upgrades
 
 c) Modify
-sudo nano /etc/apt/apt.conf.d/10periodic
+sudo nano /etc/apt/apt.conf.d/10periodic  REMOVE
 
-APT::Periodic::Update-Package-Lists "0";
-APT::Periodic::Download-Upgradeable-Packages "0";
-APT::Periodic::AutocleanInterval "40";
+APT::Periodic::Update-Package-Lists "10"; --> Remove
+APT::Periodic::Download-Upgradeable-Packages "0"; 
+APT::Periodic::AutocleanInterval "20"; 
 
 
 d) Modify
@@ -2852,39 +3011,39 @@ Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}-updates";
 };
 
-// List of packages to not update (regexp are supported)
-Unattended-Upgrade::Package-Blacklist {
-//      "vim";
-//      "libc6";
-//      "libc6-dev";
-//      "libc6-i686";
-        "samba-libs";
-
-
 Unattended-Upgrade::DevRelease "false";
 Unattended-Upgrade::AutoFixInterruptedDpkg "true";
 Unattended-Upgrade::MinimalSteps "false";
 Unattended-Upgrade::InstallOnShutdown "false";
-Unattended-Upgrade::Mail "oscar.lopez@globaleagle.com";
+Unattended-Upgrade::Mail "oscar.lopez@anuvu.com";
 Unattended-Upgrade::MailOnlyOnError "false";
 Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "false";
  
+e) Modify
+sudo nano /etc/apt/apt.conf.d/20auto-upgrades 
+APT::Periodic::Update-Package-Lists "30";  
+APT::Periodic::Download-Upgradeable-Packages "30"; 
+APT::Periodic::Unattended-Upgrade "30"; 
+APT::Periodic::AutocleanInterval "30"; 
 
-sudo nano /etc/apt/apt.conf.d/20auto-upgrades
-APT::Periodic::Update-Package-Lists "10";   ---> Apt update every 2 days
-APT::Periodic::Unattended-Upgrade "40"; -----> unattended on
 
+---------------------------------------------------------------------------------------------------------
+
+Unattended upgrade has its own log-file in /var/log/unattended-upgrades/unattended-upgrades.log
+
+----------------------------------------------------------------------------------------------------
 
 sudo systemctl restart unattended-upgrades
+sudo /usr/sbin/service unattended-upgrades status
 -------------------------------------------------------------------------------------------------
 
 Forwarding ROOT messages to oscar.lopez@globaleagle.com:
 
 - edit the /etc/aliases:
  sudo nano /etc/aliases
- root: oscar.lopez@globaleagle.com
+ root: oscar.lopez@anuvu.com
  postmaster:    root
 
  sudo newaliases
@@ -2900,9 +3059,11 @@ Script to check and notify Hard Drive usage
 
 Command: df -h grep /dev/sda5
 
-sudo nano /etc/cron.daily/df-check
+ -l
 
 '/dev/sda5' for ENK 'dev/sda1' for BWT
+
+sudo nano /etc/cron.daily/df-check
 
 #!/bin/bash
 
@@ -2918,6 +3079,21 @@ fi
 sudo chown root:root /etc/cron.daily/df-check
 sudo chmod 755 /etc/cron.daily/df-check
 -------------------------------------------------------------------------------------------------------
+Script to check that no system reboot is pending
+
+sudo nano /etc/cron.daily/reboot-check
+
+#!/bin/bash
+if [ -f /var/run/reboot-required ]
+  then
+    mailbody="System Reboot required at Virtual Machine $(hostname)"
+    echo ${mailbody} | mail -s " Updates have been applied. Please reboot" oscar.lopez@anuvu.com
+fi
+
+sudo chown root:root /etc/cron.daily/reboot-check
+sudo chmod 755 /etc/cron.daily/reboot-check
+-------------------------------------------------------------------------------------------------------
+
 Script to check that no security updates are pending
 
 sudo nano /etc/cron.daily/secupdate
@@ -2926,15 +3102,21 @@ sudo nano /etc/cron.daily/secupdate
 
 Name=$(hostname)
 Updates=$( /usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2 )
-Max=10
+Max=41
 
-if [ ${Updates%?} -ge ${Max%?} ]; then
+if [ $Updates -gt $Max ]
+ then
     mailbody="Pending Security updates at Virtual Machine ${Name}. Number of pending Updates: ${Updates}."
-    echo ${mailbody} | mail -s "Pending Security Updates Alert" oscar.lopez@globaleagle.com
+    echo ${mailbody} | mail -s "Pending Security Updates Alert" oscar.lopez@anuvu.com
 fi 
 
 sudo chown root:root /etc/cron.daily/secupdate
 sudo chmod 755 /etc/cron.daily/secupdate
+
+administrator
+sudo rm /etc/cron.daily/secupdate
+Gl0b@l3agle$
+------------------------------------------------------------------------------------------------------------------------------
 
 /usr/lib/update-notifier/apt-check 2>&1 | cut -d ';' -f 2 ----> Security Updates
 
@@ -2951,7 +3133,8 @@ sudo unattended-upgrade --dry-run -d ---------> TO Display security updates but 
 
 sudo unattended-upgrade -d -v ------------> Manually installing security updates:
 
- 
+ /var/log/unattended-upgrades/unattended-upgrades.log -----> Logs
+
 -----------------------------------------------------------------------------------------------------------
 update netdata:
 
@@ -2959,7 +3142,7 @@ sudo su
 sudo nano PortChanTraffic.html
 var RELOAD_EVERY = 120;
 
-Go to the '/var/log/unattended-upgrades' directory and check available logs
+
 
 
 ------------------------------------------------------------------------------------------------------
@@ -3022,25 +3205,86 @@ Install:
 - HTML Snippets 
 - HTML CSS Support
 - Color Highlight
+- Color Picker
 
-Color Theme: Deepdark Material Theme | Full Black Version
+Color Theme: One Dark Pro
+
+To modify remarks color in theme type:
+
+ctr/shift/p 
+
+select Open Settings (JSON)
+
+Add:
+
+"editor.tokenColorCustomizations": {
+        "comments": "#FFF000",
+    },
 
 ------------------------------------------------------------------------------
 
 NETDATA:
-
+Backbone bandwidth display:
 installation:
 sudo su
 bash <(curl -Ss https://my-netdata.io/kickstart.sh)
-scp /usr/share/netdata/web/GE_Logo.png administrator@172.20.152.123:/home/administrator/ftp
-scp /usr/share/netdata/web/PortChanTraffic.html administrator@172.20.138.123:/home/administrator/ftp
+ 
+scp administrator@172.20.128.123:/home/administrator/ftp/GE_Logo.png /home/administrator/ftp/
+scp administrator@172.20.128.123:/home/administrator/ftp/PortChanTraffic.html /home/administrator/ftp/
+
 sudo mv /home/administrator/ftp/*.* /usr/share/netdata/web/
-cd /usr/share/netdata/web/
+cd 
  sudo chown netdata GE_Logo.png
  sudo chgrp netdata GE_Logo.png
  sudo chown netdata PortChanTraffic.html
  sudo chgrp netdata PortChanTraffic.html
  sudo nano PortChanTraffic.html
+
+ sudo chown netdata bwtest2.html
+ sudo chgrp netdata bwtest2.html
+ sudo chown netdata OpsEngIP_1.html
+ sudo chgrp netdata OpsEngIP_1.html
+
+**** New Netdata version: *******
+
+/var/lib/netdata/www/PortChanTraffic.html
+ sudo chown root anuvu-logo-metal.svg
+ sudo chgrp root anuvu-logo-metal.svg
+ sudo chown root PortChanTraffic.html
+ sudo chgrp root PortChanTraffic.html
+
+For Vessels:
+
+ sudo chown root Anuvu-logo-metal.svg
+ sudo chgrp root Anuvu-logo-metal.svg
+ sudo chown root anuvu-logo-white.png
+ sudo chgrp root anuvu-logo-white.png
+ sudo chown root OpsEngIP_0.html
+ sudo chgrp root OpsEngIP_0.html
+
+
+
+ <div style="width: 49%; display: inline-block; color: #00f9ff; height:80px;">
+                <div data-netdata="ipv4.errors"
+                     data-title="TOTAL NETWORK ERRORS"
+                     data-chart-library="dygraph"
+                     data-width="100%"
+                     data-height="200%"
+                     data-after="-300"
+                     data-colors="#FE0000"
+                ></div>
+            </div>
+
+            <div style="width: 49%; display: inline-block; color: #00f9ff; height:80px;">
+                <div data-netdata="ipv4.tcpsock"
+                     data-title="TOTAL ESTABLISHED TCP CONNECTIONS"
+                     data-chart-library="dygraph"
+                     data-width="100%"
+                     data-height="200%"
+                     data-after="-300"
+                     data-colors="#FE0000"
+                ></div>
+            </div>
 
 
 ----------------------------------------------------------------------------------
@@ -3058,12 +3302,20 @@ sudo nano /etc/netdata/conf.d/health_alarm_notify.conf
 
 SEND_EMAIL="NO"
 
+--------------------------------------------------------------------------------------------------------
 
-You can disable all the alarms in netdata, by editing /etc/netdata/netdata.conf and setting
+To disable all the alarms in netdata, by editing:
+
+sudo nano /etc/netdata/netdata.conf 
+
+and setting
 
 [health]
   enabled = no
 
+sudo /usr/sbin/service netdata restart
+
+-----------------------------------------------------------------------------------------------------------------
 
 sudo apt-get upgrade linux-image-generic
 
@@ -3165,9 +3417,15 @@ python3 setup.py install
 sudo tcpdump -i ens160 -v -s0 -w test1.pcap
 
 
-
+Coping a single file via SCP
 scp /home/administrator/test1.pcap administrator@10.152.18.6:/home/administrator/test1.pcap --> From server to destination
-scp /home/administrator/usr/lib/netdata/conf.d/health.d/net.conf devnet@172.16.100.55:/home/devnet/ftp/net.conf
+
+Copying multiple files via SCP
+scp source/file file2 file3 user@server:/destination
+
+Copying a folder via SCP
+scp -r /home/myfolder/*  root@example.com:/opt/odoo/scp /home/administrator/ISOs/ubuntu.7z.006 ubuntu.7z.007 ubuntu.7z.008 ubuntu.7z.009 ubuntu.7z.010  administrator@10.152.59.60:/home/administrator/ftp/
+
 
 Ununstalling packages installed with setup.py:
 
@@ -3241,6 +3499,7 @@ bash <(curl -Ss https://my-netdata.io/kickstart.sh) --stable-channel --reinstall
 
 ------------------------------------------------------------------------------
 
+
 Enabling copy/Paste on ESXi 6.5:
 
 Power off the VM.
@@ -3265,6 +3524,19 @@ Renewing Eval license on esxi
 vim-cmd vimsvc/license --show
 vim-cmd vimsvc/license --set=00000-00000-00000-00000-00000
 vim-cmd vimsvc/license --show
+
+
+To connect to a XRv via serial port:
+
+go to settings
+choose serial port
+check connect at power on
+Use network
+Direction: Server
+
+add a serial to the VM, with settings as server telnet://:22000
+
+
 
 ----------------------------------------------------------------------------------------------
  To export OVAs from different esxi versions:
@@ -3311,11 +3583,6 @@ New release '20.04.2 LTS' available.
 Run 'do-release-upgrade' to upgrade to it.
 
 -----------------------------------------------------------
-New PW:
-
-Administrator / Gl0b@l3agle$
-opsengip / Gl0ba1_2021! ---> ENK
-OpsEngIP / Gl0ba1_2021! ---> BWT
 
 
 C:\Program Files (x86)\VMware\VMware Remote Console\vmrc.exe vmrc://[USERNAME]@[VC]/?moid="vm-324"
@@ -3362,22 +3629,30 @@ apt-get install pfring-dkms nprobe ntopng n2disk cento
 --------------------------------------------------------------------------------------------------
 Installing lftp to transfer large files:
 
-sudo apt-get install lftp
+- ON Destiny Server:
 
-Transferring large files: 
+  sudo apt-get install lftp
 
-administrator@ENK-LAB-01:~/ftp$ lftp administrator@10.200.8.31
+- Move to destination Directory
+     
+   cd Downloads
 
-lftp administrator@10.200.8.31:~> cd ftp
+  lftp administrator@<Target Server>
 
-lftp administrator@10.200.8.31:/ftp> pget -n 10 test.txt
+  lftp administrator@Target Server:~> cd <Target Directory>
 
+  lftp administrator@Target Server:~> ls -l --> Lists files in sub-directory
 
-md5sum ENK_Sniffer_1.1-disk1.vmdk
+  lftp administrator@Target Server>:/ftp> pget -c -n 10 <Target File>  ------> For single File
 
+  mirror --verbose --use-pget-n=8 -c --verbose ENK_Sniffer_1.1 /home/administrator/Downloads/ ---> Transfers entire Folder
+
+  mirror --verbose --use-pget-n=8 -c --verbose /remote/directory/that-you-want-to-download /local/directory/to-save
+
+  mirror --verbose --use-pget-n=10 -c --verbose /OVFs/BW_Test_Teleport_2.0 /home/administrator/OVFs/
 --------------------------------------------------------------------------------------------------------------------------
 
-nternet Speed Test
+Internet Speed Test
 
 Make sure the file you use in your test is > 50mb to get good results. Dependancies: sudo apt-get install lftp iperf Show Sample Output
 
@@ -3421,4 +3696,352 @@ sudo chown root:root /etc/cron.daily/no_sec_ipadd
 sudo chmod 755 /etc/cron.daily/no_sec_ipadd
 
 ----------------------------------------------------------------------------------
+
+HOL-04: http://172.20.132.250/
+SAN-01: http://172.20.144.250/
+RAI-01: http://172.20.142.122/
+
+------------------------------------------------------------
+
+which python3 ---> Path to python3 interpreter
+
+---------------------------------------------------------------
+
+Script to remove sec ip address
+
+sudo nano /etc/cron.daily/no_sec_ipadd
+
+#!/bin/bash
+
+/usr/sbin/dhclient -r
+
+/usr/sbin/dhclient -r
+
+/usr/sbin/dhclient ens160
+
+
+sudo chown root:root /etc/cron.daily/no_sec_ipadd
+sudo chmod 755 /etc/cron.daily/no_sec_ipadd
+
+---------------------------------------------------------------------
+
+pip3 install netmiko --upgrade
+
+pip3 install --upgrade pip
+
+-----------------------------------------------------------
+
+The $PATH directory
+
+echo $PATH to check out which folders are in our $PATH directory:
+
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+You could technically add your script to any of your listed folders, but convention holds that we should list them in /usr/local/path.
+
+Another way to allow the shell to access our script is to add the containing folder to our $PATH. Add the following code to your ~/.bash_profile. This is the file that gets run every time you start a new shell. 
+
+PATH=$PATH:/path/to/our/scripts
+export PATH
+
+-----------------------------------------------------------------------
+CRON
+
+crontab -e
+
+00 10,21 * * * /usr/sbin/dhclient -r && /usr/sbin/dhclient ens160
+
+crontab -l
+
+------------------------------------------------------------------------
+
+https://maps.google.com/maps?q=26.085256,-77.536358  --> Castaway ke query on confluence widget
+
+------------------------------------------------------------------------------------
+
+Creating shorter files out of a big one 
+
+sudo apt install p7zip-full
+
+7z a -v50m -mx0 ubuntu.7z ubuntu-20.04.2-live-server-amd64.iso
+
+- To transmit manually:
+apt install sshpass
+
+sshpass -p mtn33024 scp ubuntu.7z.001  administrator@10.200.8.21:/home/administrator/Images/temp/
+sshpass -p mtn33024 scp ubuntu.7z.002  administrator@10.200.8.21:/home/administrator/Images/temp/
+sshpass -p mtn33024 scp ubuntu.7z.003  administrator@10.200.8.21:/home/administrator/Images/temp/ 
+etc..
+
+- To re-build
+7z e ubuntu.7z.001
+
+- Check hash of rebuilded file and compare with original
+md5sum ubuntu-20.04.2-live-server-amd64.iso
+
+---------------------------------------------------------------------------
+
+Path variable:
+
+echo $PATH
+
+ln [-sf] [source] [destination] --> Symbolic link
+
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+
+----------------------------------------------------------------------------
+
+How to clone a VM
+
+- Check the Harddisk name of the cloning VM 
+    datastore1] BW_Test_TG_1/BW_Test_TG_1.vmdk
+
+- Go to datastore browser locate the HD 
+
+- Create a new directory for new VM
+
+- Copy files .vmx and .vmdk to new directory
+
+- Right-click on .vmx file and select Register VM
+
+- In the VM section now have two similar VMs. Check the HD name to determine which one is the new one
+
+- Change the name of new VM
+
+- Run it and select I copied
+
+--------------------------------------------------------------------------------------
+
+ls -lrt|awk '{print $9}' ---> Prints the 9th file of the ls -lrt command
+
+---------------------------------------------------------------------------------------
+
+Kron for IOS and IOS-XE
+
+kron policy-list conf_bkp
+ cli show running-config | redirect tftp://172.20.130.122/GE_HUB1_HRT1.ATL
+ cli show running-config | redirect tftp://172.20.142.122/GE_HUB1_HRT1.ATL
+!
+kron occurrence conf_bkp_Schedule at 3:59 recurring
+ policy-list conf_bkp
+!
+
+kron policy-list conf_bkp
+ cli show running-config | redirect tftp://172.20.130.122/GE_HUB1_HRT2.ATL
+ cli show running-config | redirect tftp://172.20.142.122/GE_HUB1_HRT2.ATL
+!
+kron occurrence conf_bkp_Schedule at 3:59 recurring
+ policy-list conf_bkp
+!
+
+IF on a mgmt interface (vlan 2), use the command: ip tftp source-interface GigabitEthernet0/0    
+------------------------------------------------------------------------------------------------
+
+Scheduler for NX-OS
+
+feature scheduler
+scheduler logfile size 64
+scheduler aaa-authentication username oscarl password huemac86  
+scheduler job name backup-config
+copy  running-config tftp://172.20.130.122/GE_HUB1_SW1.ATL vrf default
+copy  running-config tftp://172.20.142.122/GE_HUB1_SW1.ATL vrf default
+!
+scheduler schedule name Daily_Bkp
+time daily 3:59
+job name backup-config
+!
+
+feature scheduler
+scheduler logfile size 64
+scheduler aaa-authentication username oscarl password huemac86
+scheduler job name backup-config
+copy  running-config tftp://172.20.130.122/GE_HUB1_SW2.ATL vrf default
+copy  running-config tftp://172.20.142.122/GE_HUB1_SW2.ATL vrf default
+!
+scheduler schedule name Daily_Bkp
+time daily 3:59
+job name backup-config
+!
+
+
+show scheduler config
+
+---------------------------------------------------------------------------------------------------- 
+
+FOR LAB:
+
+Adding a hostname in the tftp file
+
+sudo touch GE_HUB1_INT_HRT1.MIR
+sudo chown tftp GE_HUB1_INT_HRT1.MIR
+sudo chgrp tftp GE_HUB1_INT_HRT1.MIR
+sudo chmod 666 GE_HUB1_INT_HRT1.MIR
+
+sudo touch GE_HUB1_INT_SW1.MIR
+sudo chown tftp GE_HUB1_INT_SW1.MIR
+sudo chgrp tftp GE_HUB1_INT_SW1.MIR
+sudo chmod 666 GE_HUB1_INT_SW1.MIR
+
+kron policy-list conf_bkp
+ cli show running-config | redirect tftp://10.214.8.121/MIR/GE_HUB1_INT_HR1.MIR
+ cli show running-config | redirect tftp://172.16.100.55/MIR/GE_HUB1_INT_HRT1.MIR
+!
+
+kron occurrence conf_bkp_Schedule at 17:40 recurring
+ policy-list conf_bkp
+!
+
+Adding OpsEngIP User:
+
+sudo useradd -m OpsEngIP
+sudo passwd OpsEngIP
+Gl0ba1_2021!
+sudo usermod -aG sudo OpsEngIP
+sudo usermod -s /bin/bash OpsEngIP
+
+---------------------------------------------------------------------------------------------------
+Adding a hostname in the tftp file
+
+sudo touch MIR_iDX_LAB_LAN.sw
+sudo chown tftp MIR_iDX_LAB_LAN.sw
+sudo chgrp tftp MIR_iDX_LAB_LAN.sw
+sudo chmod 666 MIR_iDX_LAB_LAN.sw
+
+------------------------------------------------------------------------------------------------------
+ 
+Set up SSH Keys 
+
+- On devnet Server Create key pair
+
+   ssh-keygen -t rsa
+
+
+- Copy the public key in remote ELK server as authorized_keys in ~/.ssh/ 
+
+ scp $HOME/.ssh/id_rsa.pub administrator@172.20.128.123:~/.ssh/authorized_keys
+
+
+Gl0b@l3agle$
+
+----------------------------------------------------------------------------------------------------------
+
+Installing Webmin
+
+sudo apt update
+sudo apt upgrade
+sudo apt install software-properties-common apt-transport-https
+sudo wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] http://download.webmin.com/download/repository sarge contrib"
+sudo apt install webmin
+
+sudo systemctl status webmin
+
+---------------------------------------------------------------------------------------------------
+
+uptime -s or last reboot
+
+-------------------------------------------------------------------------------
+
+Upgrade 18.04 to 20.04
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt --purge autoremove -y
+sudo apt install update-manager-core -y
+sudo shutdown -r now
+sudo do-release-upgrade 
+---------------------------------------------------------------------------------------------
+
+apt commands:
+
+sudo apt list
+sudo apt purge apache2
+sudo apt clean
+sudo apt autoremove
+sudo apt -f install
+ 
+--------------------------------------------------------------------
+
+sudo systemctl status cron.service
+
+run-parts -v /etc/cron.daily ---> Runs the jobs in cron
+
+---------------------------------------------------------------------------------------------
+
+WEB Test
+
+hostname -I
+Output: 172.20.156.121 10.111.61.252 10.111.60.124 10.111.59.60
+
+curl -4 icanhazip.com
+Output: 216.7.159.249
+
+
+To check resources utilization:
+
+- $ free
+- $ htop (apt install)
+
+loader > boot bootflash:nxos.9.2.1.bin
+
+-------------------------------------------------------------------------------------
+Upgrading ESXi from Rel.6.0 to 6.7 
+
+- Enable SSH 
+- Right click host and select Enter maintenance mode
+- upload the offline Bundle to datastore
+- Type esxcli software sources profile list -d /vmfs/volumes/datastore1/VMware-ESXi-7.0U3-18644231-depot.zip
+ and pick a profile, in this case standard is choosen
+- type esxcli software profile update -p ESXi-6.7.0-8169922-standard -d /vmfs/volumes/datastore1/VMware-ESXi-6.7.0-8169922-depot.zip
+- Reboot
+- Exit maintenance mode
+
+------------------------------------------------------------------------------------------------------------
+
+Steps for configuring and enabling SNMP on ESXi Host
+
+Steps are in chronological order.
+
+    Putty into the ESXi Host.
+    Login as user root
+    Execute the following commands:
+        esxcli system snmp get
+        esxcli system snmp set --syscontact=your name
+        esxcli system snmp set --communities=icghol
+        esxcli system snmp set --enable=true
+        esxcli system snmp get
+    End
+----------------------------------------------------------------------------
+Upgrading to Ubuntu 22
+
+sudo apt update
+sudo apt upgrade
+sudo apt dist-upgrade -y
+sudo apt autoremove
+sudo apt autoclean
+sudo reboot
+
+sudo apt install update-manager-core
+sudo do-release-upgrade
+
+Ubuntu disables any third-party repositories during the upgrade. To search for disabled repositories, switch to the sources.list.d directory and list the entries.
+
+cd /etc/apt/sources.list.d
+ls -l
+
+Edit each list using a text editor. Remove the # symbol at the start of the affected entries, and save the file. In the following example, remove the # symbol in front of deb [arch=amd64].
+
+---------------------------------------------------------------------------------
+
+Ansible playbook command:
+
+ansible-playbook reboot.yaml -i inventory.yaml
+
+------------------------------------------------------------------------------------------
+Finding files in linux
+
+locate <file>
+which <file>
+cd ..
 
